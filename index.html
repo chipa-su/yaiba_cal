@@ -3,254 +3,1113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>呼吸計算機</title>
+<title>全集中・呼吸計算機 2.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Yuji+Boku&family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#0a0a0d; --paper:#f1ecdf; --gold:#d9b24a;
-    --jade:#1f6f4f; --jade-dark:#0c1f16;
-    /* Apple 按鈕灰階 */
-    --num-1:#4c4c50; --num-2:#39393d;
-    --fn-1:#bcbcc0;  --fn-2:#a3a3a8; --fn-text:#161617;
+  :root {
+    --ink: #0a0a0d; 
+    --paper: #f1ecdf; 
+    --gold: #d9b24a;
+    --jade: #1f6f4f; 
+    --jade-dark: #0c1f16;
+    /* 預設按鈕灰階 */
+    --num-1: #3a3a3e; 
+    --num-2: #28282b;
+    --fn-1: #c5c5ca;  
+    --fn-2: #ababaf; 
+    --fn-text: #161617;
+    
     /* 預設：炎之呼吸（橘） */
-    --accent-1:#ff9f0a; --accent-2:#ff7a18; --accent-3:#c2470b;
-    --glow:rgba(255,140,40,.55); --op-text:#fff;
-    --brush:'Yuji Syuku','Shippori Mincho',serif;
+    --accent-1: #ff9f0a; 
+    --accent-2: #ff7a18; 
+    --accent-3: #c2470b;
+    --glow: rgba(255, 140, 40, .55); 
+    --op-text: #fff;
+    --brush: 'Yuji Syuku', 'Shippori Mincho', serif;
   }
-  .b-water { --accent-1:#3aa7e0; --accent-2:#1c5e9e; --accent-3:#0e3a63; --glow:rgba(58,167,224,.55); --op-text:#eaf6ff; }
-  .b-thunder{ --accent-1:#ffe14d; --accent-2:#f4b41a; --accent-3:#a36b00; --glow:rgba(255,210,60,.6);  --op-text:#3a2400; }
-  .b-wind  { --accent-1:#46c08a; --accent-2:#1f7a55; --accent-3:#0c3d29; --glow:rgba(70,192,138,.55); --op-text:#eafff5; }
-  .b-mist  { --accent-1:#b39ddb; --accent-2:#7e57c2; --accent-3:#4a2f7a; --glow:rgba(150,110,220,.55);--op-text:#f6f0ff; }
-  .b-love  { --accent-1:#ff9ec0; --accent-2:#e85d8a; --accent-3:#a83366; --glow:rgba(255,120,170,.55);--op-text:#fff2f7; }
 
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html,body{height:100%;}
-  body{
-    font-family:'Zen Kaku Gothic New',sans-serif;
+  /* 👘 各個呼吸法的專屬羽織背景圖紋 */
+  .b-flame {
+    --accent-1: #ff9f0a; --accent-2: #ff7a18; --accent-3: #c2470b; --glow: rgba(255,140,40,.65); --op-text: #fff;
+    /* 炎之呼吸：紅白火焰烈火羽織漸層 */
+    background: linear-gradient(135deg, #240b0b 0%, #6e1616 50%, #b84f14 85%, #ffd460 100%) !important;
+  }
+  .b-water { 
+    --accent-1: #3aa7e0; --accent-2: #1c5e9e; --accent-3: #0e3a63; --glow: rgba(58,167,224,.65); --op-text: #eaf6ff;
+    /* 水之呼吸：富岡義勇經典半紅半綠黃龜甲市松紋羽織 */
+    background: 
+      linear-gradient(90deg, #5c2020 50%, transparent 50%),
+      repeating-conic-gradient(#18523b 0% 25%, #0f3d2a 0% 50%) 0 0 / 40px 40px !important;
+  }
+  .b-thunder { 
+    --accent-1: #ffe14d; --accent-2: #f4b41a; --accent-3: #a36b00; --glow: rgba(255,210,60,.7);  --op-text: #3a2400;
+    /* 雷之呼吸：我妻善逸經典黃白三角雷鱗紋 */
+    background-color: #f4b41a !important;
+    background-image: 
+      linear-gradient(135deg, #e59d0b 25%, transparent 25%),
+      linear-gradient(225deg, #e59d0b 25%, transparent 25%),
+      linear-gradient(45deg, #e59d0b 25%, transparent 25%),
+      linear-gradient(315deg, #e59d0b 25%, #d48c08 25%) !important;
+    background-size: 32px 32px !important;
+  }
+  .b-wind { 
+    --accent-1: #46c08a; --accent-2: #1f7a55; --accent-3: #0c3d29; --glow: rgba(70,192,138,.65); --op-text: #eafff5;
+    /* 風之呼吸：深綠氣流與疤痕線條交錯風羽織 */
+    background: repeating-linear-gradient(45deg, #0a2216, #0a2216 12px, #123825 12px, #123825 24px) !important;
+  }
+  .b-mist { 
+    --accent-1: #b39ddb; --accent-2: #7e57c2; --accent-3: #4a2f7a; --glow: rgba(150,110,220,.65); --op-text: #f6f0ff;
+    /* 霞之呼吸：時透無一郎深青薄綠迷霧羽織漸層 */
+    background: linear-gradient(180deg, #0d1b2a 0%, #1b3a4b 50%, #4a7c59 100%) !important;
+  }
+  .b-love { 
+    --accent-1: #ff9ec0; --accent-2: #e85d8a; --accent-3: #a83366; --glow: rgba(255,120,170,.65); --op-text: #fff2f7;
+    /* 戀之呼吸：甘露寺蜜璃粉綠愛心相間條紋羽織 */
+    background: repeating-linear-gradient(90deg, #ffa6c9, #ffa6c9 15px, #c7f9cc 15px, #c7f9cc 30px) !important;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
     background:
-      radial-gradient(120% 80% at 50% -10%, #241015 0%, transparent 55%),
-      radial-gradient(100% 60% at 50% 110%, #0c1a24 0%, transparent 55%),
+      radial-gradient(120% 80% at 50% -10%, #291319 0%, transparent 55%),
+      radial-gradient(100% 60% at 50% 110%, #0e2230 0%, transparent 55%),
       var(--ink);
-    color:var(--paper);
-    min-height:100%; display:flex; align-items:center; justify-content:center;
-    padding:28px 16px; overflow-x:hidden; position:relative;
+    color: var(--paper);
+    min-height: 100%; display: flex; align-items: center; justify-content: center;
+    padding: 28px 16px; overflow-x: hidden; position: relative;
   }
-  body::before{
-    content:""; position:fixed; inset:0;
+  body::before {
+    content: ""; position: fixed; inset: 0;
     background-image:
-      radial-gradient(2px 2px at 20% 30%, rgba(255,140,60,.5), transparent),
-      radial-gradient(1.5px 1.5px at 70% 60%, rgba(255,90,40,.4), transparent),
-      radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,170,90,.35), transparent),
-      radial-gradient(2px 2px at 85% 25%, rgba(255,120,50,.4), transparent);
-    animation:drift 9s linear infinite; pointer-events:none; opacity:.55;
+      radial-gradient(2px 2px at 20% 30%, rgba(255,140,60,.4), transparent),
+      radial-gradient(1.5px 1.5px at 70% 60%, rgba(255,90,40,.3), transparent),
+      radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,170,90,.3), transparent),
+      radial-gradient(2px 2px at 85% 25%, rgba(255,120,50,.3), transparent);
+    animation: drift 10s linear infinite; pointer-events: none; opacity: .45;
   }
-  @keyframes drift{ from{transform:translateY(0);} to{transform:translateY(-30px);} }
+  @keyframes drift { from { transform: translateY(0); } to { transform: translateY(-40px); } }
 
-  .frame{
-    position:relative; width:min(360px,100%);
-    background:repeating-conic-gradient(var(--jade) 0% 25%, var(--jade-dark) 0% 50%) 0 0 / 40px 40px;
-    border-radius:22px; padding:18px;
-    box-shadow:0 0 0 1px rgba(217,178,74,.35), 0 30px 70px rgba(0,0,0,.75), inset 0 0 0 4px rgba(0,0,0,.3);
-    overflow:hidden;
-  }
-  .frame::before{
-    content:""; position:absolute; inset:0;
-    background:radial-gradient(120% 120% at 50% 0%, rgba(0,0,0,.18), rgba(0,0,0,.66) 80%);
-    pointer-events:none;
-  }
-  .frame > *{ position:relative; z-index:1; }
-
-  .title{
-    font-family:'Yuji Boku','Yuji Syuku',serif; letter-spacing:.16em;
-    font-size:24px; text-align:center; color:#fff; margin:2px 0;
-    text-shadow:0 2px 10px rgba(0,0,0,.8), 0 0 16px var(--glow);
-  }
-  .subtitle{
-    font-family:'Yuji Syuku',serif; text-align:center; font-size:12px;
-    letter-spacing:.35em; color:var(--gold); text-shadow:0 1px 4px rgba(0,0,0,.9); margin-bottom:10px;
+  /* 計算機外框架 */
+  .frame {
+    position: relative; width: min(370px, 100%);
+    border-radius: 26px; padding: 12px;
+    box-shadow: 0 0 0 1px rgba(217,178,74,.4), 0 35px 80px rgba(0,0,0,.85), inset 0 0 0 1px rgba(255,255,255,.1);
+    overflow: hidden;
+    transition: background 0.6s ease, box-shadow 0.3s ease;
+    /* 預設背景：竈門炭治郎經典綠黑市松紋 (讓平時完全不單調，充滿傳統和風感) */
+    background: repeating-conic-gradient(var(--jade) 0% 25%, var(--jade-dark) 0% 50%) 0 0 / 40px 40px;
   }
 
-  .breaths{ display:flex; gap:6px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
-  .breaths button{
-    font-family:var(--brush); font-size:17px;
-    width:34px; height:34px; border:1px solid rgba(217,178,74,.3); border-radius:9px;
-    background:rgba(10,10,14,.7); color:rgba(241,236,223,.72); cursor:pointer;
-    transition:all .18s ease; -webkit-tap-highlight-color:transparent;
+  /* 物理震動特效 */
+  .frame.shake {
+    animation: frame-shake 0.38s cubic-bezier(.36,.07,.19,.97) both;
   }
-  .breaths button:hover{ color:#fff; border-color:rgba(217,178,74,.6); }
-  .breaths button.on{
-    color:#fff; border-color:transparent; text-shadow:0 1px 2px rgba(0,0,0,.55);
-    background:linear-gradient(180deg,var(--bp1),var(--bp2));
-    box-shadow:0 0 14px var(--bpg), inset 0 1px 0 rgba(255,255,255,.3);
-  }
-  .breaths button[data-breath="flame"]  { --bp1:#ff9f0a; --bp2:#ff7a18; --bpg:rgba(255,140,40,.6); }
-  .breaths button[data-breath="water"]  { --bp1:#3aa7e0; --bp2:#1c5e9e; --bpg:rgba(58,167,224,.6); }
-  .breaths button[data-breath="thunder"]{ --bp1:#ffe14d; --bp2:#f4b41a; --bpg:rgba(255,210,60,.6); }
-  .breaths button[data-breath="wind"]   { --bp1:#46c08a; --bp2:#1f7a55; --bpg:rgba(70,192,138,.6); }
-  .breaths button[data-breath="mist"]   { --bp1:#b39ddb; --bp2:#7e57c2; --bpg:rgba(150,110,220,.6); }
-  .breaths button[data-breath="love"]   { --bp1:#ff9ec0; --bp2:#e85d8a; --bpg:rgba(255,120,170,.6); }
-
-  .screen{
-    position:relative;
-    background:radial-gradient(120% 100% at 80% 0%, var(--glow), transparent 60%), linear-gradient(180deg,#0c0c11,#070709);
-    border:1px solid rgba(217,178,74,.35); border-radius:14px; padding:16px 18px;
-    margin-bottom:16px; overflow:hidden;
-    box-shadow:0 6px 18px rgba(0,0,0,.6), inset 0 0 30px rgba(0,0,0,.6);
-  }
-  .screen::after{
-    content:""; position:absolute; top:0; left:-60%; width:40%; height:100%;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,.06),transparent);
-    transform:skewX(-18deg); animation:slash-idle 7s ease-in-out infinite;
-  }
-  @keyframes slash-idle{ 0%,72%{left:-60%;} 88%,100%{left:140%;} }
-  .history{
-    min-height:22px; text-align:right; font-family:var(--brush);
-    font-size:16px; color:rgba(241,236,223,.5); letter-spacing:.06em; word-break:break-all; line-height:1.4;
-  }
-  .result{
-    text-align:right; font-family:var(--brush); font-size:42px;
-    line-height:1.2; margin-top:6px; word-break:break-all; color:#fff;
-    text-shadow:0 2px 16px var(--glow); transition:transform .08s ease, font-size .12s ease; letter-spacing:.03em;
-  }
-  .result.fx{ animation:ink-bleed .95s cubic-bezier(.22,.7,.18,1); }
-  @keyframes ink-bleed{
-    0%   { filter:blur(7px); opacity:.35; transform:scale(1.16);
-           color:#c7bfae; text-shadow:0 0 26px rgba(0,0,0,.95), 0 0 13px rgba(6,6,8,.95); }
-    25%  { filter:blur(3.5px); opacity:.7; transform:scale(1.09); color:#d8d0bf; }
-    55%  { filter:blur(1.4px); transform:scale(1.03); color:#ece5d5; }
-    100% { filter:blur(0); opacity:1; transform:scale(1);
-           color:#fff; text-shadow:0 2px 16px var(--glow); }
+  @keyframes frame-shake {
+    10%, 90% { transform: translate3d(-1.5px, 0, 0); }
+    20%, 80% { transform: translate3d(2.5px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4.5px, 0, 0); }
+    40%, 60% { transform: translate3d(4.5px, 0, 0); }
   }
 
-  .grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
-  button.key{
-    font-family:var(--brush); font-size:27px; color:#fff;
-    border:none; border-radius:16px; padding:17px 0; cursor:pointer; position:relative;
-    background:linear-gradient(180deg,var(--num-1),var(--num-2));
-    box-shadow:0 2px 6px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08);
-    transition:transform .06s ease, filter .12s ease; user-select:none; -webkit-tap-highlight-color:transparent;
+  /* Canvas 粒子特效層 */
+  .canvas-particles {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 1;
+    border-radius: 26px;
   }
-  button.key:active{ transform:scale(.95); filter:brightness(1.2); }
-  button.key:hover{ filter:brightness(1.1); }
-  .span2{ grid-column:span 2; }
 
-  /* 功能鍵：淺灰深字（Apple） */
-  .key.fn{
-    font-size:20px; color:var(--fn-text);
-    background:linear-gradient(180deg,var(--fn-1),var(--fn-2));
-    box-shadow:0 2px 6px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.45);
+  /* 🍧 毛玻璃面板內框：調高透明度，使經典羽織紋與市松紋底層清晰透出 */
+  .frame-inner {
+    position: relative;
+    background: rgba(10, 10, 15, 0.45);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(217, 178, 74, 0.35);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.65);
+    z-index: 2;
+    overflow: hidden;
   }
+
+  .title {
+    font-family: 'Yuji Boku', 'Yuji Syuku', serif; letter-spacing: .2em;
+    font-size: 25px; text-align: center; color: #fff; margin: 2px 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,.9), 0 0 16px var(--glow);
+  }
+  .subtitle {
+    font-family: 'Yuji Syuku', serif; text-align: center; font-size: 12px;
+    letter-spacing: .35em; color: var(--gold); text-shadow: 0 1px 4px rgba(0,0,0,.9); margin-bottom: 12px;
+  }
+
+  /* 呼吸選擇區與靜音按鈕 */
+  .breaths { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; align-items: center; }
+  .breaths button {
+    font-family: var(--brush); font-size: 17px;
+    width: 34px; height: 34px; border: 1px solid rgba(217, 178, 74, 0.3); border-radius: 9px;
+    background: rgba(10, 10, 14, 0.8); color: rgba(241, 236, 223, 0.72); cursor: pointer;
+    transition: all .2s ease; -webkit-tap-highlight-color: transparent;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .breaths button:hover { color: #fff; border-color: rgba(217, 178, 74, 0.7); }
+  .breaths button.on {
+    color: #fff; border-color: transparent; text-shadow: 0 1px 2px rgba(0,0,0,.6);
+    background: linear-gradient(180deg, var(--bp1), var(--bp2));
+    box-shadow: 0 0 14px var(--bpg), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  .breaths button[data-breath="flame"]  { --bp1: #ff9f0a; --bp2: #ff7a18; --bpg: rgba(255,140,40,.6); }
+  .breaths button[data-breath="water"]  { --bp1: #3aa7e0; --bp2: #1c5e9e; --bpg: rgba(58,167,224,.6); }
+  .breaths button[data-breath="thunder"]{ --bp1: #ffe14d; --bp2: #f4b41a; --bpg: rgba(255,210,60,.6); }
+  .breaths button[data-breath="wind"]   { --bp1: #46c08a; --bp2: #1f7a55; --bpg: rgba(70,192,138,.6); }
+  .breaths button[data-breath="mist"]   { --bp1: #b39ddb; --bp2: #7e57c2; --bpg: rgba(150,110,220,.6); }
+  .breaths button[data-breath="love"]   { --bp1: #ff9ec0; --bp2: #e85d8a; --bpg: rgba(255,120,170,.6); }
+
+  /* 靜音按鈕樣式 */
+  .mute-btn {
+    color: var(--gold) !important;
+    font-size: 15px !important;
+  }
+  .mute-btn.muted {
+    color: rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  /* 螢幕 */
+  .screen {
+    position: relative;
+    background: radial-gradient(120% 100% at 85% 0%, var(--glow), transparent 65%), linear-gradient(180deg, #0a0a0e, #050507);
+    border: 1px solid rgba(217, 178, 74, 0.35); border-radius: 14px; padding: 18px 18px 14px 18px;
+    margin-bottom: 16px; overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.7), inset 0 0 25px rgba(0,0,0,0.8);
+  }
+  .screen::after {
+    content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    transform: skewX(-18deg); animation: slash-idle 8s ease-in-out infinite;
+  }
+  @keyframes slash-idle { 0%, 75% { left: -60%; } 90%, 100% { left: 140%; } }
+  
+  .history {
+    min-height: 22px; text-align: right; font-family: var(--brush);
+    font-size: 16px; color: rgba(241, 236, 223, 0.48); letter-spacing: .06em; word-break: break-all; line-height: 1.4;
+    margin-top: 10px;
+  }
+  .result {
+    text-align: right; font-family: var(--brush); font-size: 42px;
+    line-height: 1.2; margin-top: 4px; word-break: break-all; color: #fff;
+    text-shadow: 0 2px 16px var(--glow); transition: transform .08s ease, font-size .12s ease; letter-spacing: .03em;
+  }
+  .result.fx { animation: ink-bleed .95s cubic-bezier(.22, .7, .18, 1); }
+  @keyframes ink-bleed {
+    0%   { filter: blur(8px); opacity: .3; transform: scale(1.18);
+           color: #c7bfae; text-shadow: 0 0 28px rgba(0,0,0,0.98), 0 0 15px rgba(6,6,8,0.95); }
+    25%  { filter: blur(4px); opacity: .65; transform: scale(1.1); color: #d8d0bf; }
+    55%  { filter: blur(1.5px); transform: scale(1.03); color: #ece5d5; }
+    100% { filter: blur(0); opacity: 1; transform: scale(1);
+           color: #fff; text-shadow: 0 2px 16px var(--glow); }
+  }
+
+  /* 🌌 螢幕內左上角術式名閃爍發光特效 */
+  .combo-tag-container {
+    position: absolute;
+    top: 6px; left: 12px; right: 12px;
+    height: 18px; overflow: hidden;
+    pointer-events: none; z-index: 3;
+    display: flex; align-items: center;
+  }
+  .combo-tag {
+    font-family: var(--brush); font-size: 11px; color: #fff;
+    white-space: nowrap; letter-spacing: 0.1em;
+    text-shadow: 0 0 3px #fff, 0 0 8px var(--glow);
+    transform: translateX(-105%); opacity: 0;
+  }
+  .combo-tag.active {
+    animation: combo-tag-slide 1.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  }
+  @keyframes combo-tag-slide {
+    0% { transform: translateX(-105%); opacity: 0; filter: brightness(2.5); }
+    15% { transform: translateX(0); opacity: 1; filter: brightness(2); }
+    25% { filter: brightness(1.2); }
+    82% { transform: translateX(0); opacity: 1; filter: brightness(1); }
+    100% { transform: translateX(110%); opacity: 0; }
+  }
+
+  /* 按鍵佈局與樣式 */
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  button.key {
+    font-family: var(--brush); font-size: 26px; color: #fff;
+    border: none; border-radius: 16px; padding: 16px 0; cursor: pointer; position: relative;
+    background: linear-gradient(180deg, var(--num-1), var(--num-2));
+    box-shadow: 0 3px 6px rgba(0,0,0,0.55), inset 0 1.5px 0 rgba(255, 255, 255, 0.08);
+    transition: transform .06s ease, filter .15s ease, box-shadow .06s ease; 
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  button.key:active { transform: scale(.93); filter: brightness(1.25); box-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+  button.key:hover { filter: brightness(1.12); }
+  .span2 { grid-column: span 2; }
+
+  /* 功能鍵：淺灰深字 */
+  .key.fn {
+    font-size: 20px; color: var(--fn-text);
+    background: linear-gradient(180deg, var(--fn-1), var(--fn-2));
+    box-shadow: 0 3px 6px rgba(0,0,0,0.55), inset 0 1.5px 0 rgba(255, 255, 255, 0.45);
+  }
+  
   /* 運算鍵：呼吸法配色 */
-  .key.op{
-    color:var(--op-text);
-    background:linear-gradient(180deg,var(--accent-1),var(--accent-2) 60%,var(--accent-3));
-    box-shadow:0 2px 8px rgba(0,0,0,.4), 0 0 16px var(--glow), inset 0 1px 0 rgba(255,255,255,.28);
+  .key.op {
+    color: var(--op-text);
+    background: linear-gradient(180deg, var(--accent-1), var(--accent-2) 60%, var(--accent-3));
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5), 0 0 14px var(--glow), inset 0 1.5px 0 rgba(255, 255, 255, 0.28);
   }
-  /* 等於：日輪 */
-  .key.equals{
-    color:var(--op-text);
-    background:radial-gradient(circle at 50% 32%, #ffffff 0%, var(--accent-1) 36%, var(--accent-2) 74%, var(--accent-3));
-    box-shadow:0 2px 10px rgba(0,0,0,.4), 0 0 22px var(--glow), inset 0 1px 0 rgba(255,255,255,.45);
-  }
-
-  .footnote{
-    text-align:center; font-family:'Yuji Syuku',serif; font-size:11px; letter-spacing:.3em;
-    color:rgba(217,178,74,.75); text-shadow:0 1px 3px rgba(0,0,0,.9); margin-top:14px;
+  
+  /* 等於鍵：日輪 */
+  .key.equals {
+    color: var(--op-text);
+    background: radial-gradient(circle at 50% 32%, #ffffff 0%, var(--accent-1) 36%, var(--accent-2) 74%, var(--accent-3));
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5), 0 0 20px var(--glow), inset 0 1.5px 0 rgba(255, 255, 255, 0.45);
   }
 
-  /* 全屏斬擊 */
-  .slash-fx{ position:absolute; inset:0; pointer-events:none; z-index:5; opacity:0; }
-  .slash-fx .blade{
-    position:absolute; top:-40%; left:-40%; width:180%; height:16px;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,.98) 47%, #fff 50%, rgba(255,255,255,.98) 53%, transparent);
-    box-shadow:0 0 24px 10px var(--glow), 0 0 70px 22px var(--glow);
-    transform:rotate(-32deg) translateX(-130%); filter:blur(.4px);
+  .footnote {
+    text-align: center; font-family: 'Yuji Syuku', serif; font-size: 11px; letter-spacing: .3em;
+    color: rgba(217, 178, 74, 0.75); text-shadow: 0 1px 3px rgba(0,0,0,0.9); margin-top: 14px;
   }
-  .slash-fx .blade.b2{ height:9px; box-shadow:0 0 18px 7px rgba(255,255,255,.6), 0 0 56px 18px var(--glow); }
-  .slash-fx .flash{
-    position:absolute; inset:0; opacity:0;
-    background:radial-gradient(circle at 68% 36%, rgba(255,255,255,.9), var(--glow) 38%, transparent 72%);
+
+  /* 全屏斬擊特效基礎結構 */
+  .slash-fx { position: absolute; inset: 0; pointer-events: none; z-index: 5; opacity: 0; }
+  .slash-fx .blade {
+    position: absolute; top: -40%; left: -40%; width: 180%; height: 16px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.98) 47%, #fff 50%, rgba(255,255,255,.98) 53%, transparent);
+    box-shadow: 0 0 24px 10px var(--glow), 0 0 70px 22px var(--glow);
+    transform: rotate(-32deg) translateX(-130%); filter: blur(.4px);
   }
-  .frame.cut .slash-fx{ animation:fx-show .62s ease forwards; }
-  .frame.cut .slash-fx .blade{  animation:blade-cut .40s cubic-bezier(.18,.85,.1,1) forwards; }
-  .frame.cut .slash-fx .blade.b2{ animation:blade-cut2 .48s .05s cubic-bezier(.18,.85,.1,1) forwards; }
-  .frame.cut .slash-fx .flash{ animation:flash .5s ease forwards; }
-  @keyframes fx-show{ 0%{opacity:1;} 100%{opacity:0;} }
-  @keyframes blade-cut{ 0%{transform:rotate(-32deg) translateX(-130%);opacity:0;} 16%{opacity:1;} 100%{transform:rotate(-32deg) translateX(130%);opacity:0;} }
-  @keyframes blade-cut2{ 0%{transform:rotate(34deg) translateX(-130%);opacity:0;} 16%{opacity:1;} 100%{transform:rotate(34deg) translateX(130%);opacity:0;} }
-  @keyframes flash{ 0%{opacity:0;} 12%{opacity:1;} 100%{opacity:0;} }
+  .slash-fx .blade.b2 { height: 9px; box-shadow: 0 0 18px 7px rgba(255,255,255,.6), 0 0 56px 18px var(--glow); }
+  .slash-fx .flash {
+    position: absolute; inset: 0; opacity: 0;
+    background: radial-gradient(circle at 68% 36%, rgba(255,255,255,.9), var(--glow) 38%, transparent 72%);
+  }
+  .frame-inner.cut .slash-fx { animation: fx-show .62s ease forwards; }
+  .frame-inner.cut .slash-fx .blade { animation: blade-cut .40s cubic-bezier(.18, .85, .1, 1) forwards; }
+  .frame-inner.cut .slash-fx .blade.b2 { animation: blade-cut2 .48s .05s cubic-bezier(.18, .85, .1, 1) forwards; }
+  .frame-inner.cut .slash-fx .flash { animation: flash .5s ease forwards; }
+  
+  @keyframes fx-show { 0% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes blade-cut { 0% { transform: rotate(-32deg) translateX(-130%); opacity: 0; } 16% { opacity: 1; } 100% { transform: rotate(-32deg) translateX(130%); opacity: 0; } }
+  @keyframes blade-cut2 { 0% { transform: rotate(34deg) translateX(-130%); opacity: 0; } 16% { opacity: 1; } 100% { transform: rotate(34deg) translateX(130%); opacity: 0; } }
+  @keyframes flash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* ⚔️ ⚔️ ⚔️ 各呼吸法的「特製斬擊光芒差異」 ⚔️ ⚔️ ⚔️ */
+  
+  /* 1. 炎之呼吸：狂暴火焰斬擊 (厚重、火紅與亮黃，極高發光) */
+  .b-flame .slash-fx .blade {
+    background: linear-gradient(90deg, transparent, #ff3c00 45%, #fff 50%, #ffaa00 55%, transparent) !important;
+    box-shadow: 0 0 32px 14px #ff3c00, 0 0 85px 28px #ffcc00 !important;
+    height: 18px;
+  }
+  .b-flame .slash-fx .blade.b2 {
+    background: linear-gradient(90deg, transparent, #ff7a18 45%, #fff 50%, #ffcc00 55%, transparent) !important;
+    box-shadow: 0 0 22px 9px #ff7a18, 0 0 60px 20px #ffea00 !important;
+    height: 10px;
+  }
+
+  /* 2. 水之呼吸：湛藍波濤斬擊 (湛藍水波與白水滴，線條流暢) */
+  .b-water .slash-fx .blade {
+    background: linear-gradient(90deg, transparent, #0088ff 44%, #fff 50%, #00e1ff 56%, transparent) !important;
+    box-shadow: 0 0 30px 12px #0088ff, 0 0 80px 25px #00e1ff !important;
+  }
+  .b-water .slash-fx .blade.b2 {
+    background: linear-gradient(90deg, transparent, #1c5e9e 44%, #fff 50%, #3aa7e0 56%, transparent) !important;
+    box-shadow: 0 0 20px 8px #1c5e9e, 0 0 55px 18px #3aa7e0 !important;
+  }
+
+  /* 3. 雷之呼吸：金色瞬閃電擊 (極速 0.2s 爆發，金色霹靂，鋸齒電光) */
+  .b-thunder .frame-inner.cut .slash-fx .blade {
+    animation-duration: 0.20s !important;
+    background: linear-gradient(90deg, transparent, #ffcc00 46%, #fff 50%, #ffffff 54%, transparent) !important;
+    box-shadow: 0 0 35px 16px #ffcc00, 0 0 95px 32px #ffffff !important;
+    height: 20px;
+  }
+  .b-thunder .frame-inner.cut .slash-fx .blade.b2 {
+    animation-duration: 0.24s !important;
+    background: linear-gradient(90deg, transparent, #f4b41a 46%, #fff 50%, #ffe14d 54%, transparent) !important;
+    box-shadow: 0 0 24px 10px #f4b41a, 0 0 65px 22px #ffe14d !important;
+    height: 12px;
+  }
+
+  /* 4. 風之呼吸：翠綠旋風利刃 (翠綠尖銳爪痕氣流，多重割裂感) */
+  .b-wind .slash-fx .blade {
+    background: linear-gradient(90deg, transparent, #00cc66 45%, #fff 50%, #a3ffd6 55%, transparent) !important;
+    box-shadow: 0 0 28px 11px #00cc66, 0 0 78px 24px #a3ffd6 !important;
+  }
+  .b-wind .slash-fx .blade.b2 {
+    background: linear-gradient(90deg, transparent, #1f7a55 45%, #fff 50%, #46c08a 55%, transparent) !important;
+    box-shadow: 0 0 18px 7px #1f7a55, 0 0 52px 16px #46c08a !important;
+  }
+
+  /* 5. 霞之呼吸：迷濛霧化光刃 (帶有 5px 的 blur 高模糊度，縹緲隱密) */
+  .b-mist .slash-fx .blade {
+    filter: blur(5px) !important;
+    background: linear-gradient(90deg, transparent, #a080f0 44%, #fff 50%, #80e0ff 56%, transparent) !important;
+    box-shadow: 0 0 36px 16px #a080f0, 0 0 92px 30px #80e0ff !important;
+  }
+  .b-mist .slash-fx .blade.b2 {
+    filter: blur(4px) !important;
+    background: linear-gradient(90deg, transparent, #7e57c2 44%, #fff 50%, #b39ddb 56%, transparent) !important;
+    box-shadow: 0 0 24px 10px #7e57c2, 0 0 65px 20px #b39ddb !important;
+  }
+
+  /* 6. 戀之呼吸：粉嫩愛心花戀斬擊 (粉紅與嫩綠雙色交融，宛若飄逸彩帶) */
+  .b-love .slash-fx .blade {
+    background: linear-gradient(90deg, transparent, #ff66a3 45%, #fff 50%, #ffa6c9 55%, transparent) !important;
+    box-shadow: 0 0 30px 12px #ff66a3, 0 0 80px 25px #ffa6c9 !important;
+  }
+  .b-love .slash-fx .blade.b2 {
+    background: linear-gradient(90deg, transparent, #e85d8a 45%, #fff 50%, #c7f9cc 55%, transparent) !important;
+    box-shadow: 0 0 20px 8px #e85d8a, 0 0 55px 18px #c7f9cc !important;
+  }
 </style>
 </head>
 <body>
   <div class="frame" id="frame">
-    <div class="slash-fx" id="slashfx">
-      <div class="flash"></div>
-      <div class="blade"></div>
-      <div class="blade b2"></div>
+    <!-- 背景 Canvas 粒子渲染 -->
+    <canvas class="canvas-particles" id="canvas-particles"></canvas>
+    
+    <!-- 毛玻璃面板內層 -->
+    <div class="frame-inner" id="frame-inner">
+      <div class="slash-fx" id="slashfx">
+        <div class="flash"></div>
+        <div class="blade"></div>
+        <div class="blade b2"></div>
+      </div>
+
+      <div class="title">全集中・計算</div>
+      <div class="subtitle">壹ノ型　四則演算</div>
+
+      <div class="breaths" id="breaths">
+        <button class="on" data-breath="flame">炎</button>
+        <button data-breath="water">水</button>
+        <button data-breath="thunder">雷</button>
+        <button data-breath="wind">風</button>
+        <button data-breath="mist">霞</button>
+        <button data-breath="love">戀</button>
+        <button id="mute-btn" class="mute-btn" data-breath="mute" title="靜音/啟用音效">🔊</button>
+      </div>
+
+      <div class="screen">
+        <!-- 🌌 術式名從螢幕左上角以明亮小字往右邊滑過閃動 -->
+        <div class="combo-tag-container">
+          <div id="combo-tag" class="combo-tag"></div>
+        </div>
+        <div class="history" id="history">&nbsp;</div>
+        <div class="result" id="result">零</div>
+      </div>
+
+      <div class="grid">
+        <button class="key fn" data-action="clear">重置</button>
+        <button class="key fn" data-action="del">後退</button>
+        <button class="key fn" data-action="percent">百分</button>
+        <button class="key op" data-op="/">除</button>
+
+        <button class="key" data-num="7">七</button>
+        <button class="key" data-num="8">八</button>
+        <button class="key" data-num="9">九</button>
+        <button class="key op" data-op="*">乘</button>
+
+        <button class="key" data-num="4">四</button>
+        <button class="key" data-num="5">五</button>
+        <button class="key" data-num="6">六</button>
+        <button class="key op" data-op="-">減</button>
+
+        <button class="key" data-num="1">一</button>
+        <button class="key" data-num="2">二</button>
+        <button class="key" data-num="3">三</button>
+        <button class="key op" data-op="+">加</button>
+
+        <button class="key span2" data-num="0">零</button>
+        <button class="key" data-action="dot">點</button>
+        <button class="key equals" data-action="equals">等於</button>
+      </div>
+
+      <div class="footnote">心、燃やせ</div>
     </div>
-
-    <div class="title">全集中・計算</div>
-    <div class="subtitle">壹ノ型　四則演算</div>
-
-    <div class="breaths" id="breaths">
-      <button class="on" data-breath="flame">炎</button>
-      <button data-breath="water">水</button>
-      <button data-breath="thunder">雷</button>
-      <button data-breath="wind">風</button>
-      <button data-breath="mist">霞</button>
-      <button data-breath="love">戀</button>
-    </div>
-
-    <div class="screen">
-      <div class="history" id="history">&nbsp;</div>
-      <div class="result" id="result">零</div>
-    </div>
-
-    <div class="grid">
-      <button class="key fn" data-action="clear">重置</button>
-      <button class="key fn" data-action="del">後退</button>
-      <button class="key fn" data-action="percent">百分</button>
-      <button class="key op" data-op="/">除</button>
-
-      <button class="key" data-num="7">七</button>
-      <button class="key" data-num="8">八</button>
-      <button class="key" data-num="9">九</button>
-      <button class="key op" data-op="*">乘</button>
-
-      <button class="key" data-num="4">四</button>
-      <button class="key" data-num="5">五</button>
-      <button class="key" data-num="6">六</button>
-      <button class="key op" data-op="-">減</button>
-
-      <button class="key" data-num="1">一</button>
-      <button class="key" data-num="2">二</button>
-      <button class="key" data-num="3">三</button>
-      <button class="key op" data-op="+">加</button>
-
-      <button class="key span2" data-num="0">零</button>
-      <button class="key" data-action="dot">點</button>
-      <button class="key equals" data-action="equals">等於</button>
-    </div>
-
-    <div class="footnote">心、燃やせ</div>
   </div>
 
 <script>
-(function(){
-  const resultEl  = document.getElementById('result');
-  const historyEl = document.getElementById('history');
-  const frame     = document.getElementById('frame');
-  const breaths   = document.getElementById('breaths');
+// ============================================================================
+// 🔊 1. Web Audio API 和風音效合成器引擎
+// ============================================================================
+class YaibaAudio {
+  constructor() {
+    this.ctx = null;
+    this.muted = false;
+    this.noiseBuffer = null;
+  }
 
-  let current='0', stored=null, op=null, justEval=false;
+  init() {
+    if (this.ctx) return;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    this.ctx = new AudioContext();
+    this.createNoiseBuffer();
+  }
+
+  createNoiseBuffer() {
+    if (!this.ctx) return;
+    const bufferSize = this.ctx.sampleRate * 0.5;
+    this.noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = this.noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+  }
+
+  // 輕脆太鼓點擊聲（數字鍵）
+  playTaiko() {
+    this.init();
+    if (this.muted || !this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    const now = this.ctx.currentTime;
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(30, now + 0.12);
+
+    gain.gain.setValueAtTime(0.7, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+
+    osc.start(now);
+    osc.stop(now + 0.13);
+  }
+
+  // 拔刀金屬鏘鏘聲（功能與運算鍵）
+  playSwordDraw() {
+    this.init();
+    if (this.muted || !this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const now = this.ctx.currentTime;
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const filter = this.ctx.createBiquadFilter();
+    const gain = this.ctx.createGain();
+
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc1.type = 'triangle';
+    osc1.frequency.setValueAtTime(800, now);
+    osc1.frequency.exponentialRampToValueAtTime(1800, now + 0.12);
+
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(1200, now);
+    osc2.frequency.exponentialRampToValueAtTime(2400, now + 0.1);
+
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(1600, now);
+
+    gain.gain.setValueAtTime(0.22, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 0.18);
+    osc2.stop(now + 0.18);
+  }
+
+  // 銳利普通斬擊聲
+  playSlash() {
+    this.init();
+    if (this.muted || !this.ctx || !this.noiseBuffer) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const now = this.ctx.currentTime;
+    const source = this.ctx.createBufferSource();
+    const filter = this.ctx.createBiquadFilter();
+    const gain = this.ctx.createGain();
+
+    source.buffer = this.noiseBuffer;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    filter.type = 'bandpass';
+    filter.Q.setValueAtTime(3.5, now);
+    filter.frequency.setValueAtTime(3200, now);
+    filter.frequency.exponentialRampToValueAtTime(450, now + 0.22);
+
+    gain.gain.setValueAtTime(0.85, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.26);
+
+    source.start(now);
+    source.stop(now + 0.26);
+  }
+
+  // ⚡ 雷之呼吸・特製奧義音效：高頻瞬閃電擊滑音 + 震耳低頻落雷引爆
+  playKamiRaiShin() {
+    this.init();
+    if (this.muted || !this.ctx || !this.noiseBuffer) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const now = this.ctx.currentTime;
+    
+    // 1. 金屬瞬閃拔刀聲
+    this.playSwordDraw();
+
+    // 2. 電磁高頻顫音
+    const osc = this.ctx.createOscillator();
+    const oscGain = this.ctx.createGain();
+    osc.connect(oscGain);
+    oscGain.connect(this.ctx.destination);
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(3200, now + 0.04);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.32);
+    
+    oscGain.gain.setValueAtTime(0.01, now);
+    oscGain.gain.linearRampToValueAtTime(0.28, now + 0.08);
+    oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.32);
+    
+    osc.start(now);
+    osc.stop(now + 0.33);
+
+    // 3. 巨雷引爆 (低通白噪音，發揮強烈爆發力)
+    const source = this.ctx.createBufferSource();
+    const filter = this.ctx.createBiquadFilter();
+    const gain = this.ctx.createGain();
+
+    source.buffer = this.noiseBuffer;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(260, now + 0.08);
+    filter.frequency.exponentialRampToValueAtTime(20, now + 0.52);
+
+    gain.gain.setValueAtTime(0.01, now);
+    gain.gain.linearRampToValueAtTime(1.3, now + 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
+
+    source.start(now + 0.08);
+    source.stop(now + 0.55);
+  }
+
+  // 🌊 水之呼吸・拾壹ノ型 凪：神級「寂靜意境音效」 (前500ms安靜無聲，隨後才流出極清澈乾淨的水濤聲)
+  playNagi() {
+    this.init();
+    if (this.muted || !this.ctx || !this.noiseBuffer) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const now = this.ctx.currentTime;
+    
+    // 凪的寂靜效果：前 500ms 完全靜止，然後才放出空靈水流聲
+    const source = this.ctx.createBufferSource();
+    const filter = this.ctx.createBiquadFilter();
+    const gain = this.ctx.createGain();
+
+    source.buffer = this.noiseBuffer;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    filter.type = 'bandpass';
+    filter.Q.setValueAtTime(2.0, now + 0.45);
+    filter.frequency.setValueAtTime(1900, now + 0.45);
+    filter.frequency.exponentialRampToValueAtTime(450, now + 0.95);
+
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.setValueAtTime(0.45, now + 0.45);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.95);
+
+    source.start(now + 0.45);
+    source.stop(now + 1.0);
+  }
+
+  // 轟雷聲
+  playThunder() {
+    this.init();
+    if (this.muted || !this.ctx || !this.noiseBuffer) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const now = this.ctx.currentTime;
+    this.playSwordDraw();
+
+    const source = this.ctx.createBufferSource();
+    const filter = this.ctx.createBiquadFilter();
+    const gain = this.ctx.createGain();
+
+    source.buffer = this.noiseBuffer;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(350, now);
+    filter.frequency.exponentialRampToValueAtTime(35, now + 0.4);
+
+    gain.gain.setValueAtTime(0.95, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+
+    source.start(now);
+    source.stop(now + 0.45);
+  }
+
+  // 烈火咆哮呼嘯聲 (炎之呼吸)
+  playFire() {
+    this.init();
+    if (this.muted || !this.ctx || !this.noiseBuffer) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const now = this.ctx.currentTime;
+    const source = this.ctx.createBufferSource();
+    const filter = this.ctx.createBiquadFilter();
+    const gain = this.ctx.createGain();
+
+    source.buffer = this.noiseBuffer;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    filter.type = 'bandpass';
+    filter.Q.setValueAtTime(1.5, now);
+    filter.frequency.setValueAtTime(900, now);
+    filter.frequency.linearRampToValueAtTime(180, now + 0.38);
+
+    gain.gain.setValueAtTime(0.55, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.38);
+
+    source.start(now);
+    source.stop(now + 0.38);
+  }
+
+  // 流暢水濤氣流聲 (水之呼吸 / 霞之呼吸 / 戀之呼吸)
+  playWaterFlow() {
+    this.init();
+    if (this.muted || !this.ctx || !this.noiseBuffer) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const now = this.ctx.currentTime;
+    const source = this.ctx.createBufferSource();
+    const filter = this.ctx.createBiquadFilter();
+    const gain = this.ctx.createGain();
+
+    source.buffer = this.noiseBuffer;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    filter.type = 'bandpass';
+    filter.Q.setValueAtTime(1.2, now);
+    filter.frequency.setValueAtTime(1600, now);
+    filter.frequency.exponentialRampToValueAtTime(650, now + 0.33);
+
+    gain.gain.setValueAtTime(0.45, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.33);
+
+    source.start(now);
+    source.stop(now + 0.33);
+  }
+}
+
+// ============================================================================
+// 🌌 2. HTML5 Canvas 多元呼吸粒子引擎
+// ============================================================================
+class YaibaParticles {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.particles = [];
+    this.breath = 'flame'; // flame, water, thunder, wind, mist, love
+    this.active = true;
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    this.loop();
+  }
+
+  resize() {
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    this.canvas.width = rect.width;
+    this.canvas.height = rect.height;
+  }
+
+  setBreath(breath) {
+    this.breath = breath;
+    this.particles = []; // 切換時清空，展現乾淨的過渡
+  }
+
+  addParticle() {
+    if (this.particles.length > 70) return;
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+
+    if (this.breath === 'flame') {
+      // 炎之呼吸：由下往上的火花粒子
+      this.particles.push({
+        x: Math.random() * w,
+        y: h - 8,
+        vx: (Math.random() - 0.5) * 1.6,
+        vy: -Math.random() * 2.8 - 0.8,
+        size: Math.random() * 5 + 3,
+        color: `hsl(${Math.random() * 32 + 8}, 100%, ${Math.random() * 30 + 50}%)`,
+        alpha: 1,
+        decay: Math.random() * 0.02 + 0.014
+      });
+    } else if (this.breath === 'water') {
+      // 水之呼吸：流動的水珠與波紋
+      this.particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: Math.random() * 1.5 + 0.6,
+        vy: Math.sin(Math.random() * Math.PI) * 0.4,
+        size: Math.random() * 4 + 2,
+        color: `hsl(${Math.random() * 20 + 195}, 85%, ${Math.random() * 20 + 58}%)`,
+        alpha: 0.85,
+        decay: Math.random() * 0.015 + 0.01
+      });
+    } else if (this.breath === 'wind') {
+      // 風之呼吸：交錯旋動的翠綠氣流
+      this.particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 3.5,
+        vy: (Math.random() - 0.5) * 3.5,
+        size: Math.random() * 3 + 1.2,
+        color: `hsl(${Math.random() * 30 + 130}, 80%, ${Math.random() * 20 + 60}%)`,
+        alpha: 0.75,
+        decay: Math.random() * 0.03 + 0.02,
+        trail: []
+      });
+    } else if (this.breath === 'mist') {
+      // 霞之呼吸：漫開的模糊雲霧氣泡
+      this.particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 22 + 16,
+        color: `hsl(${Math.random() * 30 + 260}, 50%, 82%)`,
+        alpha: 0.38,
+        decay: Math.random() * 0.005 + 0.003
+      });
+    } else if (this.breath === 'love') {
+      // 戀之呼吸：心形與櫻花瓣飄落
+      this.particles.push({
+        x: Math.random() * w,
+        y: -12,
+        vx: Math.random() * 1.2 - 0.6,
+        vy: Math.random() * 1.6 + 0.7,
+        size: Math.random() * 6.5 + 4,
+        color: Math.random() > 0.4 ? '#ffa6c9' : '#c7f9cc',
+        alpha: 0.95,
+        decay: Math.random() * 0.009 + 0.007,
+        angle: Math.random() * 360,
+        spin: (Math.random() - 0.5) * 2.2
+      });
+    }
+  }
+
+  update() {
+    // 雷之呼吸常態沒有緩慢飄散粒子，由閃電直接渲染
+    if (this.breath !== 'thunder' && Math.random() < 0.45) {
+      this.addParticle();
+    }
+
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.alpha -= p.decay;
+
+      if (p.angle !== undefined) {
+        p.angle += p.spin;
+      }
+
+      if (this.breath === 'wind' && p.trail) {
+        p.trail.push({ x: p.x, y: p.y });
+        if (p.trail.length > 5) p.trail.shift();
+      }
+
+      if (p.alpha <= 0 || p.x < -60 || p.x > this.canvas.width + 60 || p.y < -60 || p.y > this.canvas.height + 60) {
+        this.particles.splice(i, 1);
+      }
+    }
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    if (this.breath === 'thunder') {
+      // 雷之呼吸：動態瞬閃電擊與弧光
+      if (Math.random() < 0.075) {
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        this.ctx.strokeStyle = `rgba(255, 225, 77, ${Math.random() * 0.8 + 0.2})`;
+        this.ctx.lineWidth = Math.random() * 3.5 + 1.2;
+        this.ctx.shadowBlur = 18;
+        this.ctx.shadowColor = 'rgba(255, 210, 60, 0.85)';
+        
+        this.ctx.beginPath();
+        let curX = Math.random() * w;
+        let curY = 0;
+        this.ctx.moveTo(curX, curY);
+
+        while (curY < h) {
+          curX += (Math.random() - 0.5) * 50;
+          curY += Math.random() * 45 + 10;
+          this.ctx.lineTo(curX, curY);
+        }
+        this.ctx.stroke();
+        
+        // 短暫電閃白光
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        this.ctx.fillRect(0, 0, w, h);
+        
+        this.ctx.shadowBlur = 0; // 重置
+      }
+      return;
+    }
+
+    for (let i = 0; i < this.particles.length; i++) {
+      const p = this.particles[i];
+      this.ctx.save();
+      this.ctx.globalAlpha = p.alpha;
+      this.ctx.fillStyle = p.color;
+
+      if (this.breath === 'flame') {
+        this.ctx.shadowBlur = p.size * 1.6;
+        this.ctx.shadowColor = p.color;
+        this.ctx.beginPath();
+        this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        this.ctx.fill();
+      } else if (this.breath === 'water') {
+        this.ctx.beginPath();
+        this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        if (i > 0 && Math.random() < 0.12) {
+          this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+          this.ctx.lineWidth = 1;
+          this.ctx.beginPath();
+          this.ctx.moveTo(p.x, p.y);
+          this.ctx.lineTo(p.x - 24, p.y + (Math.random() - 0.5) * 12);
+          this.ctx.stroke();
+        }
+      } else if (this.breath === 'wind') {
+        this.ctx.strokeStyle = p.color;
+        this.ctx.lineWidth = p.size;
+        this.ctx.lineCap = 'round';
+        if (p.trail && p.trail.length > 1) {
+          this.ctx.beginPath();
+          this.ctx.moveTo(p.trail[0].x, p.trail[0].y);
+          for (let j = 1; j < p.trail.length; j++) {
+            this.ctx.lineTo(p.trail[j].x, p.trail[j].y);
+          }
+          this.ctx.stroke();
+        }
+      } else if (this.breath === 'mist') {
+        this.ctx.shadowBlur = 22;
+        this.ctx.shadowColor = 'rgba(150, 110, 220, 0.22)';
+        this.ctx.beginPath();
+        this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        this.ctx.fill();
+      } else if (this.breath === 'love') {
+        this.ctx.translate(p.x, p.y);
+        this.ctx.rotate((p.angle * Math.PI) / 180);
+        
+        if (p.size > 5.5) {
+          // 繪製心形
+          this.ctx.beginPath();
+          this.ctx.moveTo(0, 0);
+          this.ctx.bezierCurveTo(-p.size/2, -p.size/2, -p.size, p.size/3, 0, p.size);
+          this.ctx.bezierCurveTo(p.size, p.size/3, p.size/2, -p.size/2, 0, 0);
+          this.ctx.fill();
+        } else {
+          // 繪製櫻花瓣
+          this.ctx.beginPath();
+          this.ctx.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
+          this.ctx.fill();
+        }
+      }
+      this.ctx.restore();
+    }
+  }
+
+  loop() {
+    if (!this.active) return;
+    this.update();
+    this.draw();
+    this.animationId = requestAnimationFrame(() => this.loop());
+  }
+
+  destroy() {
+    this.active = false;
+    cancelAnimationFrame(this.animationId);
+  }
+}
+
+// ============================================================================
+// 🧮 3. 計算機核心運作邏輯與奧義彩蛋系統
+// ============================================================================
+(function(){
+  const resultEl      = document.getElementById('result');
+  const historyEl     = document.getElementById('history');
+  const frame         = document.getElementById('frame');
+  const frameInner    = document.getElementById('frame-inner');
+  const breaths       = document.getElementById('breaths');
+  const comboTagEl    = document.getElementById('combo-tag');
+
+  let current = '0', stored = null, op = null, justEval = false;
 
   const cnNum  = ['零','一','二','三','四','五','六','七','八','九'];
   const cnUnit = ['','十','百','千'];
   const cnBig  = ['','萬','億','兆','京','垓'];
   const opCn   = {'+':'加','-':'減','*':'乘','/':'除'};
 
+  // 實例化音效與粒子引擎
+  const audioEngine = new YaibaAudio();
+  const particleCanvas = document.getElementById('canvas-particles');
+  const particleSystem = new YaibaParticles(particleCanvas);
+
+  // 奧義招式配置
+  const skillCombos = {
+    '9': { title: '炎之呼吸 玖ノ型 煉獄 🔥', sound: 'fire' },
+    '11': { title: '水之呼吸 拾壹ノ型 凪 🌊', sound: 'nagi' }, // Nagi 凪專屬靜止音效
+    '1': { title: '雷之呼吸 壹ノ型 霹靂一閃 ⚡', sound: 'kami' }, // Kami 電擊落雷音效
+    '7': { title: '雷之呼吸 漆ノ型 火雷神 ⚡', sound: 'kami' },
+    '520': { title: '戀之呼吸 陸ノ型 貓足戀風 💖', sound: 'water' },
+    '1314': { title: '戀之呼吸 伍ノ型 搖擺的戀情 💖', sound: 'water' },
+    'Error': { title: '拔刀失敗・日輪刀斷裂 ⚔️', sound: 'kami' }
+  };
+
+  const randomSkills = {
+    flame: [
+      '炎之呼吸 壹ノ型 不知火 🔥',
+      '炎之呼吸 貳ノ型 昇陽炎 🔥',
+      '炎之呼吸 肆ノ型 盛炎之渦 🔥',
+      '炎之呼吸 伍ノ型 炎虎 🔥'
+    ],
+    water: [
+      '水之呼吸 壹ノ型 水面斬 🌊',
+      '水之呼吸 貳ノ型 水車 🌊',
+      '水之呼吸 參ノ型 流流舞 🌊',
+      '水之呼吸 肆ノ型 打潮 🌊',
+      '水之呼吸 拾壹ノ型 凪 🌊'
+    ],
+    thunder: [
+      '雷之呼吸 壹ノ型 霹靂一閃 ⚡',
+      '雷之呼吸 壹ノ型 六連 ⚡',
+      '雷之呼吸 壹ノ型 八連 ⚡',
+      '雷之呼吸 漆ノ型 火雷神 ⚡'
+    ],
+    wind: [
+      '風之呼吸 壹ノ型 塵旋風・削 🍃',
+      '風之呼吸 貳ノ型 爪爪・科戶風 🍃',
+      '風之呼吸 參ノ型 晴嵐風樹 🍃',
+      '風之呼吸 陸ノ型 黑風烟嵐 🍃'
+    ],
+    mist: [
+      '霞之呼吸 壹ノ型 垂天遠霞 🌫️',
+      '霞之呼吸 貳ノ型 八重霞 🌫️',
+      '霞之呼吸 參ノ型 霞散蓬飛 🌫️',
+      '霞之呼吸 陸ノ型 月之霞消 🌫️'
+    ],
+    love: [
+      '戀之呼吸 壹ノ型 初戀的戰慄 💖',
+      '戀之呼吸 貳ノ型 懊惱之戀 💖',
+      '戀之呼吸 參ノ型 戀貓時雨 💖',
+      '戀之呼吸 陸ノ型 貓足戀風 💖'
+    ]
+  };
+
+  let comboTimeout = null;
+
+  // 觸發奧義招式浮現與畫面物理震動
+  function triggerCombo(resultVal) {
+    if (comboTimeout) {
+      clearTimeout(comboTimeout);
+      comboTagEl.classList.remove('active');
+    }
+
+    let skillName = '';
+    let soundType = 'slash';
+
+    const valStr = String(resultVal);
+    if (skillCombos[valStr]) {
+      skillName = skillCombos[valStr].title;
+      soundType = skillCombos[valStr].sound;
+    } else if (resultVal < 0) {
+      skillName = '血鬼術・黑死牢籠 👁️';
+      soundType = 'kami'; // 空間轉移低頻巨響
+    } else if (resultVal === 0) {
+      skillName = '全集中・常中 🧘';
+      soundType = 'water';
+    } else {
+      const activeBreathBtn = document.querySelector('.breaths button.on');
+      const currentBreath = activeBreathBtn ? activeBreathBtn.dataset.breath : 'flame';
+      const skills = randomSkills[currentBreath] || randomSkills.flame;
+      skillName = skills[Math.floor(Math.random() * skills.length)];
+      
+      const soundMap = {
+        flame: 'fire', water: 'water', thunder: 'kami',
+        wind: 'slash', mist: 'water', love: 'water'
+      };
+      soundType = soundMap[currentBreath] || 'slash';
+    }
+
+    // 🔊 差異化聲音播放：雷、水之凪各有極佳意境
+    if (skillName.includes('凪') || soundType === 'nagi') {
+      audioEngine.playNagi(); // 神級「凪」前 500ms 寂靜音效
+    } else if (skillName.includes('火雷神') || skillName.includes('霹靂一閃') || soundType === 'kami') {
+      audioEngine.playKamiRaiShin(); // 雷之呼吸・火雷神落雷引爆
+    } else if (soundType === 'fire') {
+      audioEngine.playFire();
+    } else if (soundType === 'water') {
+      audioEngine.playWaterFlow();
+    } else {
+      audioEngine.playSlash();
+    }
+
+    // 物理震動外框
+    frame.classList.remove('shake');
+    void frame.offsetWidth; // 強制瀏覽器重繪
+    frame.classList.add('shake');
+    setTimeout(() => frame.classList.remove('shake'), 380);
+
+    // 顯示奧義文字（在螢幕內左上角滑過）
+    comboTagEl.textContent = skillName;
+    comboTagEl.classList.add('active');
+
+    // 根據當前呼吸法設定光暈色彩
+    const activeBreathBtn = document.querySelector('.breaths button.on');
+    const breathType = activeBreathBtn ? activeBreathBtn.dataset.breath : 'flame';
+    let glowColor = 'rgba(255,140,40,.65)';
+    if (breathType === 'water') glowColor = 'rgba(58,167,224,.65)';
+    else if (breathType === 'thunder') glowColor = 'rgba(255,210,60,.7)';
+    else if (breathType === 'wind') glowColor = 'rgba(70,192,138,.65)';
+    else if (breathType === 'mist') glowColor = 'rgba(150,110,220,.65)';
+    else if (breathType === 'love') glowColor = 'rgba(255,120,170,.65)';
+    comboTagEl.style.setProperty('--glow', glowColor);
+
+    comboTimeout = setTimeout(() => {
+      comboTagEl.classList.remove('active');
+    }, 1800); // 縮短小字停留時間，使其迅速朝右滑走
+  }
+
+  // --------------------------------------------------------------------------
+  // 數字轉中文數字邏輯 (保留您原有的優秀核心架構)
+  // --------------------------------------------------------------------------
   function sectionToCn(sec){
     sec=('0000'+sec).slice(-4);
     let str='', lastZero=false, started=false;
@@ -293,29 +1152,39 @@
     if(decPart!==null){ out+='點'; for(let i=0;i<decPart.length;i++) out+=cnNum[parseInt(decPart[i],10)]; }
     return neg ? '負'+out : out;
   }
+  
   function fitFont(text){
     const n=text.length;
     resultEl.style.fontSize = n<=5?'42px': n<=8?'32px': n<=12?'24px': n<=18?'18px':'15px';
   }
+  
   let lastDisp=null;
   function inkBleed(){ resultEl.classList.remove('fx'); void resultEl.offsetWidth; resultEl.classList.add('fx'); }
+  
   function render(){
     const disp=cnDisplay(current);
     resultEl.textContent=disp; fitFont(disp);
     if(disp!==lastDisp){ inkBleed(); lastDisp=disp; }   /* 數字更新時墨色暈染 */
     if(stored!==null && op){ historyEl.textContent=cnDisplay(String(stored))+' '+opCn[op]; }
   }
+  
   function pulse(){ inkBleed(); }
 
+  // --------------------------------------------------------------------------
+  // 計算機操作輸入
+  // --------------------------------------------------------------------------
   function inputNum(n){
+    audioEngine.playTaiko(); // 播放敲鼓點擊音效
     if(justEval){ current='0'; stored=null; op=null; historyEl.innerHTML='&nbsp;'; justEval=false; }
     current=(current==='0')?n:current+n; render(); pulse();
   }
   function inputDot(){
+    audioEngine.playTaiko();
     if(justEval){ current='0'; stored=null; op=null; historyEl.innerHTML='&nbsp;'; justEval=false; }
     if(current.indexOf('.')===-1) current+='.'; render();
   }
   function chooseOp(nextOp){
+    audioEngine.playSwordDraw(); // 播放拔刀鏘鏘音效
     if(op && stored!==null && !justEval){ compute(); } else { stored=parseFloat(current); }
     op=nextOp; justEval=false; current='0';
     historyEl.textContent=cnDisplay(String(stored))+' '+opCn[op];
@@ -327,26 +1196,44 @@
     if(r==='Error'){ current='Error'; stored=null; }
     else { r=Math.round((r+Number.EPSILON)*1e10)/1e10; current=String(r); stored=r; }
   }
+  
   function triggerSlash(){
-    frame.classList.remove('cut'); void frame.offsetWidth; frame.classList.add('cut');
-    setTimeout(function(){ frame.classList.remove('cut'); }, 660);
+    frameInner.classList.remove('cut'); void frameInner.offsetWidth; frameInner.classList.add('cut');
+    setTimeout(function(){ frameInner.classList.remove('cut'); }, 660);
   }
+  
   function equals(){
     if(op===null || stored===null) return;
     const expr=cnDisplay(String(stored))+' '+opCn[op]+' '+cnDisplay(current)+' 等於';
     compute();
     historyEl.textContent=(current==='Error')?'抜刀失敗':expr;
-    op=null; justEval=true; render(); pulse(); triggerSlash();
+    op=null; justEval=true; 
+    
+    // 渲染結果與發動全集中斬擊奧義
+    render(); pulse(); 
+    triggerCombo(parseFloat(current));
+    triggerSlash();
   }
-  function clearAll(){ current='0'; stored=null; op=null; justEval=false; historyEl.innerHTML='&nbsp;'; render(); }
+  
+  function clearAll(){ 
+    audioEngine.playSwordDraw();
+    current='0'; stored=null; op=null; justEval=false; historyEl.innerHTML='&nbsp;'; render(); 
+  }
   function del(){
+    audioEngine.playSwordDraw();
     if(justEval){ clearAll(); return; }
     if(current.length<=1 || (current.length===2 && current.charAt(0)==='-')) current='0';
     else current=current.slice(0,-1);
     render();
   }
-  function percent(){ current=String(parseFloat(current)/100); render(); }
+  function percent(){ 
+    audioEngine.playSwordDraw();
+    current=String(parseFloat(current)/100); render(); 
+  }
 
+  // --------------------------------------------------------------------------
+  // 事件監聽
+  // --------------------------------------------------------------------------
   document.querySelector('.grid').addEventListener('click', function(e){
     const b=e.target.closest('button'); if(!b) return;
     if(b.dataset.num!==undefined) return inputNum(b.dataset.num);
@@ -360,18 +1247,51 @@
     }
   });
 
-  const breathClasses=['b-water','b-thunder','b-wind','b-mist','b-love'];
+  // 呼吸法切換與靜音控制
+  const allBreathClasses = ['b-flame', 'b-water', 'b-thunder', 'b-wind', 'b-mist', 'b-love'];
   breaths.addEventListener('click', function(e){
     const b=e.target.closest('button'); if(!b) return;
-    breaths.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); });
+    
+    if(b.id === 'mute-btn') {
+      audioEngine.muted = !audioEngine.muted;
+      b.classList.toggle('muted', audioEngine.muted);
+      b.textContent = audioEngine.muted ? '🔇' : '🔊';
+      return;
+    }
+
+    // 啟動與初始化音效
+    audioEngine.init();
+    
+    breaths.querySelectorAll('button').forEach(function(x){ if(x.id !== 'mute-btn') x.classList.remove('on'); });
     b.classList.add('on');
-    frame.classList.remove.apply(frame.classList, breathClasses);
-    const map={water:'b-water',thunder:'b-thunder',wind:'b-wind',mist:'b-mist',love:'b-love'};
-    if(map[b.dataset.breath]) frame.classList.add(map[b.dataset.breath]);
+    
+    frame.classList.remove(...allBreathClasses);
+    const breathName = b.dataset.breath;
+    const map = {flame: 'b-flame', water:'b-water', thunder:'b-thunder', wind:'b-wind', mist:'b-mist', love:'b-love'};
+    if(map[breathName]) frame.classList.add(map[breathName]);
+    
+    // Canvas 粒子切換呼吸
+    if (particleSystem) particleSystem.setBreath(breathName);
+
+    // 播放切換呼吸法的專屬氣流/元素合成聲
+    const soundMap = {
+      flame: 'fire', water: 'water', thunder: 'kami',
+      wind: 'slash', mist: 'water', love: 'water'
+    };
+    const s = soundMap[breathName];
+    if (s === 'fire') audioEngine.playFire();
+    else if (s === 'kami') audioEngine.playKamiRaiShin();
+    else if (s === 'water') audioEngine.playWaterFlow();
+    else audioEngine.playSlash();
+    
     triggerSlash();  /* 切換呼吸法時順勢斬一下 */
   });
 
+  // 鍵盤輸入映射支援
   window.addEventListener('keydown', function(e){
+    // 初始化音效，防瀏覽器防護
+    audioEngine.init();
+    
     const k=e.key;
     if(/\d/.test(k)) inputNum(k);
     else if(k==='.') inputDot();
